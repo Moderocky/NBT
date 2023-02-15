@@ -44,6 +44,17 @@ public final class NBTCompound implements NBTValue<Map<String, NBT>>, Iterable<S
         return new int[]{(int) (most >> 32), (int) most, (int) (least >> 32), (int) least};
     }
 
+    private static UUID fromLongs(long[] array) {
+        if (array.length < 2) return null;
+        return new UUID(array[0], array[1]);
+    }
+
+    private static long[] toLongs(UUID uuid) {
+        final long most = uuid.getMostSignificantBits();
+        final long least = uuid.getLeastSignificantBits();
+        return new long[]{most, least};
+    }
+
     public <Type> void set(String key, Type value) {
         if (value == null) this.remove(key);
         else if (value instanceof NBT nbt) this.map.put(key, nbt);
@@ -346,6 +357,9 @@ public final class NBTCompound implements NBTValue<Map<String, NBT>>, Iterable<S
             return fromInts(value);
         } else if (this.contains(key + "Most", Tag.LONG) && this.contains(key + "Least", Tag.LONG)) {
             return new UUID(this.get(key + "Most"), this.get(key + "Least"));
+        } else if (this.contains(key, Tag.LONG_ARRAY)) { // I would love to know why we use four ints rather than two longs
+            final long[] value = this.get(key);
+            return fromLongs(value);
         } else return null;
     }
 
@@ -353,7 +367,8 @@ public final class NBTCompound implements NBTValue<Map<String, NBT>>, Iterable<S
         if (this.contains(key + "Most", Tag.LONG) && this.contains(key + "Least", Tag.LONG)) return true;
         if (!this.containsKey(key)) return false;
         final NBT nbt = map.get(key);
-        return map.get(key).tag() == Tag.INT_ARRAY && nbt.value() instanceof int[] ints && ints.length == 4;
+        return (nbt.tag() == Tag.INT_ARRAY && nbt.value() instanceof int[] ints && ints.length == 4)
+            || (nbt.tag() == Tag.LONG_ARRAY && nbt.value() instanceof long[] longs && longs.length == 2);
     }
 
 }
