@@ -6,8 +6,13 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 public record NBTByteArray(byte[] value) implements NBTValue<byte[]>, NBT, NBTArray<Byte> {
+
     public NBTByteArray(Object value) {
         this((byte[]) value);
+    }
+
+    public NBTByteArray(Byte[] value) {
+        this(unbox(value));
     }
 
     public NBTByteArray(InputStream stream) throws IOException {
@@ -47,6 +52,12 @@ public record NBTByteArray(byte[] value) implements NBTValue<byte[]>, NBT, NBTAr
     @Override
     public int size() {
         return value.length;
+    }
+
+    private static byte[] unbox(Byte... value) {
+        final byte[] array = new byte[value.length];
+        for (int i = 0; i < value.length; i++) array[i] = value[i];
+        return array;
     }
 
 }

@@ -6,8 +6,13 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 public record NBTIntArray(int[] value) implements NBTValue<int[]>, NBT, NBTArray<Integer> {
+
     public NBTIntArray(Object value) {
         this((int[]) value);
+    }
+
+    public NBTIntArray(Integer[] value) {
+        this(unbox(value));
     }
 
     public NBTIntArray(InputStream stream) throws IOException {
@@ -46,6 +51,12 @@ public record NBTIntArray(int[] value) implements NBTValue<int[]>, NBT, NBTArray
     @Override
     public int size() {
         return value.length;
+    }
+
+    private static int[] unbox(Integer... value) {
+        final int[] array = new int[value.length];
+        for (int i = 0; i < value.length; i++) array[i] = value[i];
+        return array;
     }
 
 }
