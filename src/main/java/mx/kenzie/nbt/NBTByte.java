@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public record NBTByte(Byte value) implements NBTValue<Byte>, NBT {
+
     public NBTByte(Object value) {
         this(((Number) value).byteValue());
     }
@@ -31,4 +32,5 @@ public record NBTByte(Byte value) implements NBTValue<Byte>, NBT {
     public Tag tag() {
         return Tag.BYTE;
     }
+
 }

@@ -25,6 +25,12 @@ public record NBTIntArray(int[] value) implements NBTValue<int[]>, NBT, NBTArray
         return ints;
     }
 
+    private static int[] unbox(Integer... value) {
+        final int[] array = new int[value.length];
+        for (int i = 0; i < value.length; i++) array[i] = value[i];
+        return array;
+    }
+
     @Override
     public String toString() {
         return Arrays.toString(value);
@@ -49,14 +55,13 @@ public record NBTIntArray(int[] value) implements NBTValue<int[]>, NBT, NBTArray
     }
 
     @Override
-    public int size() {
-        return value.length;
+    public Object unwrap() {
+        return unbox(this.toArray());
     }
 
-    private static int[] unbox(Integer... value) {
-        final int[] array = new int[value.length];
-        for (int i = 0; i < value.length; i++) array[i] = value[i];
-        return array;
+    @Override
+    public int size() {
+        return value.length;
     }
 
 }

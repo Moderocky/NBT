@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public record NBTString(String value) implements NBTValue<String>, NBT {
+
     public NBTString(Object value) {
         this(value instanceof String string ? string : value.toString());
     }

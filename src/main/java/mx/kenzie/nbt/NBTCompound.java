@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public final class NBTCompound implements NBTValue<Map<String, NBT>>, Iterable<String>, Map<String, NBT>, NBT {
+
     private final Map<String, NBT> map = new HashMap<>();
 
     public NBTCompound(NBTCompound compound) {
@@ -357,7 +358,8 @@ public final class NBTCompound implements NBTValue<Map<String, NBT>>, Iterable<S
             return fromInts(value);
         } else if (this.contains(key + "Most", Tag.LONG) && this.contains(key + "Least", Tag.LONG)) {
             return new UUID(this.get(key + "Most"), this.get(key + "Least"));
-        } else if (this.contains(key, Tag.LONG_ARRAY)) { // I would love to know why we use four ints rather than two longs
+        } else if (this.contains(key,
+            Tag.LONG_ARRAY)) { // I would love to know why we use four ints rather than two longs
             final long[] value = this.get(key);
             return fromLongs(value);
         } else return null;
@@ -369,6 +371,18 @@ public final class NBTCompound implements NBTValue<Map<String, NBT>>, Iterable<S
         final NBT nbt = map.get(key);
         return (nbt.tag() == Tag.INT_ARRAY && nbt.value() instanceof int[] ints && ints.length == 4)
             || (nbt.tag() == Tag.LONG_ARRAY && nbt.value() instanceof long[] longs && longs.length == 2);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <Type> Map<String, Type> unwrap(Map<String, Type> map) {
+        for (final Entry<String, NBT> entry : this.map.entrySet())
+            map.put(entry.getKey(), (Type) entry.getValue().unwrap());
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> unwrap() {
+        return this.unwrap(new LinkedHashMap<>(this.map.size()));
     }
 
 }

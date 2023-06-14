@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 public interface NBT {
+
     static NBT convert(Object value) {
         if (value == null) return NBTEnd.INSTANCE;
         if (value instanceof NBT nbt) return nbt;
@@ -15,6 +16,10 @@ public interface NBT {
         if (value instanceof Boolean boo) return new NBTByte(boo);
         for (Tag tag : Tag.values()) for (Class<?> type : tag.types) if (type.isInstance(value)) return tag.make(value);
         return NBTEnd.INSTANCE;
+    }
+
+    default Object unwrap() {
+        return this.value();
     }
 
     <Type> Type value();
@@ -59,8 +64,11 @@ public interface NBT {
     }
 
     interface Type {
+
         int ordinal();
 
         NBT make(Object value);
+
     }
+
 }

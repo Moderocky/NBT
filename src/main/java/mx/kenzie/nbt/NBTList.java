@@ -249,6 +249,16 @@ public final class NBTList implements NBTValue<List<NBT>>, NBT, List<NBT> {
         return list;
     }
 
+    public <Type> List<Type> unwrap(List<Type> list) {
+        for (final NBT nbt : this.list) list.add((Type) nbt.unwrap());
+        return list;
+    }
+
+    @Override
+    public Object unwrap() {
+        return this.unwrap(new ArrayList<>(this.size()));
+    }
+
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
@@ -262,4 +272,5 @@ public final class NBTList implements NBTValue<List<NBT>>, NBT, List<NBT> {
         builder.append(']');
         return builder.toString();
     }
+
 }

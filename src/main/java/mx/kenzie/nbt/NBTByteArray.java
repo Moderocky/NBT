@@ -26,6 +26,12 @@ public record NBTByteArray(byte[] value) implements NBTValue<byte[]>, NBT, NBTAr
         return bytes;
     }
 
+    private static byte[] unbox(Byte... value) {
+        final byte[] array = new byte[value.length];
+        for (int i = 0; i < value.length; i++) array[i] = value[i];
+        return array;
+    }
+
     @Override
     public String toString() {
         return Arrays.toString(value);
@@ -50,14 +56,13 @@ public record NBTByteArray(byte[] value) implements NBTValue<byte[]>, NBT, NBTAr
     }
 
     @Override
-    public int size() {
-        return value.length;
+    public Object unwrap() {
+        return unbox(this.toArray());
     }
 
-    private static byte[] unbox(Byte... value) {
-        final byte[] array = new byte[value.length];
-        for (int i = 0; i < value.length; i++) array[i] = value[i];
-        return array;
+    @Override
+    public int size() {
+        return value.length;
     }
 
 }

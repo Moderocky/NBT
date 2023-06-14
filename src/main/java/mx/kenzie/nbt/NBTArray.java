@@ -18,6 +18,7 @@ public interface NBTArray<Value> extends Iterable<Value> {
 }
 
 class ArrayIterator<Value> implements Iterator<Value> {
+
     private final Value[] array;
     private int index = 0;
 

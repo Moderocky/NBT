@@ -25,6 +25,12 @@ public record NBTLongArray(long[] value) implements NBTValue<long[]>, NBT, NBTAr
         return longs;
     }
 
+    private static long[] unbox(Long... longs) {
+        final long[] array = new long[longs.length];
+        for (int i = 0; i < longs.length; i++) array[i] = longs[i];
+        return array;
+    }
+
     @Override
     public String toString() {
         return Arrays.toString(value);
@@ -49,14 +55,13 @@ public record NBTLongArray(long[] value) implements NBTValue<long[]>, NBT, NBTAr
     }
 
     @Override
-    public int size() {
-        return value.length;
+    public Object unwrap() {
+        return unbox(this.toArray());
     }
 
-    private static long[] unbox(Long... longs) {
-        final long[] array = new long[longs.length];
-        for (int i = 0; i < longs.length; i++) array[i] = longs[i];
-        return array;
+    @Override
+    public int size() {
+        return value.length;
     }
 
 }

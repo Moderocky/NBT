@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public record NBTDouble(Double value) implements NBTValue<Double>, NBT {
+
     public NBTDouble(Object value) {
         this(((Number) value).doubleValue());
     }
@@ -28,4 +29,5 @@ public record NBTDouble(Double value) implements NBTValue<Double>, NBT {
     public Tag tag() {
         return Tag.DOUBLE;
     }
+
 }
