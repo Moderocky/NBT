@@ -200,9 +200,9 @@ public final class NBTCompound implements NBTValue<Map<String, NBT>>, Iterable<S
 
     @SuppressWarnings("unchecked")
     public <Type> Type get(String key, Type alternative) {
-        if (alternative instanceof NBT) return (Type) map.getOrDefault(key, NBT.convert(alternative));
+        if (alternative instanceof NBT nbt) return (Type) map.getOrDefault(key, nbt);
         final NBT nbt = map.get(key);
-        if (nbt == null) return null;
+        if (nbt == null) return alternative;
         return nbt.value();
     }
 
