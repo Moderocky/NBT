@@ -175,7 +175,7 @@ public final class NBTList implements NBTValue<List<NBT>>, NBT, List<NBT> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return list.remove(c);
+        return list.removeAll(c);
     }
 
     @Override

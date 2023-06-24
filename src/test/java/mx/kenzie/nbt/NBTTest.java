@@ -73,6 +73,24 @@ public class NBTTest {
     }
 
     @Test
+    public void listOperations() {
+        final Collection<NBT> collection = List.of(new NBTInt(5), new NBTInt(6));
+        final NBTList list = new NBTList(collection);
+        list.addValue(7);
+        list.removeAll(collection);
+        assert list.size() == 1;
+        assert list.contains(new NBTInt(7));
+        list.addAll(List.of(new NBTInt(3), new NBTInt(5)));
+        assert list.size() == 3;
+        assert list.get(0).equals(new NBTInt(7));
+        assert list.get(1).equals(new NBTInt(3));
+        assert list.get(2).equals(new NBTInt(5));
+        list.retainAll(List.of(new NBTInt(5)));
+        assert list.size() == 1;
+        assert list.get(0).equals(new NBTInt(5));
+    }
+
+    @Test
     public void stream() throws IOException {
         final NBTCompound first = new NBTCompound(), second = new NBTCompound();
         first.set("hello", "there");
